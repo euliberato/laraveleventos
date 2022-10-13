@@ -8,27 +8,28 @@ return new class extends Migration
 {
     /**
      * Run the migrations.
-     * Criar tabela
+     *
      * @return void
      */
     public function up()
     {
-        Schema::create('product', function (Blueprint $table) {
+        Schema::create('events', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 100);
-            $table->integer('qty');
-            $table->text('description');
             $table->timestamps();
+            $table->string('title');
+            $table->text('description');
+            $table->string('city');
+            $table->boolean('private');
         });
     }
 
     /**
      * Reverse the migrations.
-     * Deletar tabela
+     *
      * @return void
      */
     public function down()
     {
-        Schema::dropIfExists('product');
+        Schema::dropIfExists('events');
     }
 };
