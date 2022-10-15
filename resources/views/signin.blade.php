@@ -9,4 +9,6 @@
 <p>Senha: [___________________]</p>
 <p>[Entrar]</p>
 
+<a href="/">Retornar</a>
+
 @endsection
