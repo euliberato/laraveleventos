@@ -1,5 +1,3 @@
-
-/*
 /*Estilo padrão*/
 * {
     font-family: Roboto;
@@ -43,7 +41,7 @@ header {
 #navbar {
     justify-content: space-between;
     background-color: #fff;
-    padding: 5px 0;
+    padding: 5px 30px;
 }
 
 #navbar a {
@@ -125,6 +123,23 @@ header {
 .card-participants {
     font-size: 14px;
     color: #757575;
+}
+
+/*Pagina de criar eventos*/
+
+#event-create-container {
+    padding: 30px;
+}
+
+#event-create-container label {
+    font-weight: bold;
+}
+
+#event-create-container input,
+#event-create-container select,
+#event-create-container textarea {
+    font-size: 12px;
+    margin: 15px;
 }
 
 /*Footer*/
