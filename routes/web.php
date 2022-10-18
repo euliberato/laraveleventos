@@ -15,9 +15,16 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\EventController;
 
-Route::get('/', [EventController::class, 'index']);
-Route::get('/events/create', [EventController::class, 'create']);
-Route::post('/events', [EventController::class, 'store']);
+
+//Routes em produção
+Route::get('/', [EventController::class, 'index']); //Mostrar registros
+Route::get('/events/create', [EventController::class, 'create']); //Mostrar formulario
+Route::get('/events/{id}', [EventController::class, 'show']); //Mostrar Dado específico
+Route::post('/events', [EventController::class, 'store']); //Enviar dados
+
+
+//Routes que não estão em uso
+//O bootstrap não foi requisitado
 
 Route::get('/events', [EventController::class, 'events']);
 

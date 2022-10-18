@@ -52,12 +52,12 @@ class EventController extends Controller
         return view('events');
     }
 
-    public function signin() {
-        return view('signin');
-    }
+    public function show($id){
 
-    public function signup() {
-        return view('signup');
+        $event = Event::findOrFail($id);
+
+        return view('events.show', ['event' => $event]);
+
     }
 
 }

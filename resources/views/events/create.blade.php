@@ -4,6 +4,8 @@
 
 @section('content')
 
+{{--Nesta view, será responsabilidade do formulário pegar o input das informações: img.png / nome / descrição--}}
+
 <div id="event-create-container" class="col-md-6 offset-md-3">
     <h1>Criar registro (CREATE)</h1>
     <form action="/events" method="POST" enctype="multipart/form-data">

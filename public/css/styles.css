@@ -69,8 +69,8 @@ header {
     background-image: url(../img/banner.jpg);
     background-size: cover;
     background-position: center;
-    height: 400px;
-    padding: 500px;
+    height: 100px;
+    padding: 350px;
     text-align: center;
 }
 
@@ -150,6 +150,43 @@ header {
 #event-create-container textarea {
     font-size: 12px;
     margin: 15px;
+}
+
+/*Event page */
+#image-container,
+#info-container {
+    margin-top: 30px;
+}
+
+#image-container img {
+    border-radius: 10px;
+}
+
+#info-container h1 {
+    font-size: 36px;
+    font-weight: 900;
+}
+
+#info-container p {
+    font-size: 14px;
+    margin: 20px;
+    display: flex;
+}
+
+#info-container h3,
+#description-container h3 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+#info-container ion-icon {
+    font-size: 20px;
+    color: #f2a340;
+    margin-right: 10px;
+}
+
+#info-container #event-submit {
+    margin: 20px 0;
 }
 
 /*Footer*/

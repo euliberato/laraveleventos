@@ -1,5 +1,7 @@
 @extends('layouts.main')
 
+{{--Irá realizar a chamada da extensão /layout/main | Nesse caso a template engine irá ser responsável pelas seções--}}
+
 @section('title', 'Entrar')
 
 @section('content')

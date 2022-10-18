@@ -14,6 +14,9 @@
         <title>@yield('title')</title>
         <link rel="stylesheet" href="/css/styles.css">
 
+        {{--O método yield irá definir de forma dinâmica o conteúdo e o título da view--}}
+        {{--O local onde o yield é declarado será o content da view dinâmica--}}
+
         <script src="/js/scripts.js"></script>
 
     </head>
