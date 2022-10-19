@@ -23,8 +23,6 @@ Route::get('/events/{id}', [EventController::class, 'show']); //Mostrar Dado esp
 Route::post('/events', [EventController::class, 'store']); //Enviar dados
 
 
-//Routes que não estão em uso
-//O bootstrap não foi requisitado
 
 Route::get('/events', [EventController::class, 'events']);
 
