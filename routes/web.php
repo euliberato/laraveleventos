@@ -26,7 +26,12 @@ Route::post('/events', [EventController::class, 'store']); //Enviar dados
 
 Route::get('/events', [EventController::class, 'events']);
 
-Route::get('/signin', [EventController::class, 'signin']);
-
-Route::get('/signup', [EventController::class, 'signup']);
-
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified'
+])->group(function () {
+    Route::get('/dashboard', function () {
+        return view('dashboard');
+    })->name('dashboard');
+});
