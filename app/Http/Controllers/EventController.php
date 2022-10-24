@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Models\Event;
 
+use App\Models\User;
+
 class EventController extends Controller
 {
     public function index(){
@@ -47,6 +49,9 @@ class EventController extends Controller
             $event->image = $imageName;
         }
 
+        $user = auth()->user();
+        $event->user_id = $user->id;
+
         $event->save();
 
         return redirect('/')->with('msg', 'Evento criado com sucesso!');
@@ -60,8 +65,27 @@ class EventController extends Controller
 
         $event = Event::findOrFail($id);
 
-        return view('events.show', ['event' => $event]);
+        $eventOwner = User::where('id', $event->user_id)->first()->toArray();
 
+        return view('events.show', ['event' => $event, 'eventOwner' => $eventOwner]);
+
+    }
+
+    public function dashboard() {
+
+        $user = auth()->user();
+
+        $events = $user->events;
+
+        return view('events.dashboard', ['events' => $events]);
+    }
+
+    public function destroy($id) {
+
+        Event::findOrFail($id)->delete();
+
+        return redirect('/dashboard')->with('msg', 'Evento excluído com sucesso!');
+        
     }
 
 }

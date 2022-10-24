@@ -15,23 +15,12 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\EventController;
 
-
-//Routes em produção
 Route::get('/', [EventController::class, 'index']); //Mostrar registros
-Route::get('/events/create', [EventController::class, 'create']); //Mostrar formulario
+Route::get('/events/create', [EventController::class, 'create'])->middleware('auth'); //Mostrar formulario
 Route::get('/events/{id}', [EventController::class, 'show']); //Mostrar Dado específico
 Route::post('/events', [EventController::class, 'store']); //Enviar dados
-
+Route::get('/dashboard', [EventController::class, 'dashboard'])->middleware('auth'); //Dashboard
+Route::delete('/events/{id}', [EventController::class, 'destroy']);
 
 
 Route::get('/events', [EventController::class, 'events']);
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified'
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-});
