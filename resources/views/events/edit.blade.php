@@ -30,12 +30,12 @@
             <label for="title">O evento é privado?</label>
             <select name="private" id="private" class="form-control">
                 <option value="0">Não</option>
-                <option value="1">Sim</option>
+                <option value="1" {{ $event->private == 1 ? "selected = 'selected'" : "" }} >Sim</option>
             </select>
         </div>
         <div class="form-groups">
             <label for="title">Descrição:</label>
-            <textarea name="description" id="description" class="form-control" placeholder="Uma breve descrição do seu evento..."></textarea>
+            <textarea name="description" id="description" class="form-control" placeholder="Uma breve descrição do seu evento...">{{ $event->description }}</textarea>
         </div>
         <div class="form-groups">
             <label for="title">Adicione itens de infraestrutura:</label>
