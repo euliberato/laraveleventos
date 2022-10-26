@@ -61,6 +61,7 @@ class EventController extends Controller
         return view('events');
     }
 
+    //Retorno da query 
     public function show($id){
 
         $event = Event::findOrFail($id);
@@ -70,7 +71,8 @@ class EventController extends Controller
         return view('events.show', ['event' => $event, 'eventOwner' => $eventOwner]);
 
     }
-
+    
+    //Autenticacao p/ dashboard
     public function dashboard() {
 
         $user = auth()->user();
@@ -80,12 +82,21 @@ class EventController extends Controller
         return view('events.dashboard', ['events' => $events]);
     }
 
+    //Controller para o DELETE
     public function destroy($id) {
 
         Event::findOrFail($id)->delete();
 
         return redirect('/dashboard')->with('msg', 'Evento excluído com sucesso!');
         
+    }
+
+    public function edit($id){
+
+        $event = Event::findOrFail($id);
+
+        return view('events.edit', ['event' => $event]); 
+
     }
 
 }

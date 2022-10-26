@@ -20,7 +20,8 @@ Route::get('/events/create', [EventController::class, 'create'])->middleware('au
 Route::get('/events/{id}', [EventController::class, 'show']); //Mostrar Dado específico
 Route::post('/events', [EventController::class, 'store']); //Enviar dados
 Route::get('/dashboard', [EventController::class, 'dashboard'])->middleware('auth'); //Dashboard
-Route::delete('/events/{id}', [EventController::class, 'destroy']);
+Route::delete('/events/{id}', [EventController::class, 'destroy'])->middleware('auth'); //Rota delete recebe ID | Destroy é um padrão
+Route::get('/events/edit/{id}', [EventController::class, 'edit'])->middleware('auth'); //Rota para editar evento | Edit é um padrão de rota
 
 
 Route::get('/events', [EventController::class, 'events']);
