@@ -15,16 +15,26 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\EventController;
 
-Route::get('/', [EventController::class, 'index']); //Mostrar registros
-Route::get('/events/create', [EventController::class, 'create'])->middleware('auth'); //Mostrar formulario
-Route::get('/events/{id}', [EventController::class, 'show']); //Mostrar Dado específico
-Route::post('/events', [EventController::class, 'store']); //Enviar dados
-Route::get('/dashboard', [EventController::class, 'dashboard'])->middleware('auth'); //Dashboard
-Route::delete('/events/{id}', [EventController::class, 'destroy'])->middleware('auth'); //Rota delete recebe ID | Destroy é um padrão
-Route::get('/events/edit/{id}', [EventController::class, 'edit'])->middleware('auth'); //Rota para editar evento | Edit é um padrão de rota
-Route::put('/events/update/{id}', [EventController::class, 'update'])->middleware('auth'); //Nova rota que irá servir para atualizar o registro | Update é um padrão de rota
-Route::post('/events/join/{id}', [EventController::class, 'joinEvent'])->middleware('auth'); //Nova rota que irá servir para confirmar presença no evento | Padrão: joinEvent
+Route::get('/', [EventController::class, 'index']);
+
+Route::get('/events/create', [EventController::class, 'create'])->middleware('auth');
+
+Route::get('/events/{id}', [EventController::class, 'show']);
+
+Route::post('/events', [EventController::class, 'store']);
+
+Route::delete('/events/{id}', [EventController::class, 'destroy'])->middleware('auth');
+
+Route::get('/events/edit/{id}', [EventController::class, 'edit'])->middleware('auth');
+
+Route::put('/events/update/{id}', [EventController::class, 'update'])->middleware('auth');
+
+Route::get('/contact', function() {
+    return view('contact');
+});
+
+Route::get('/dashboard', [EventController::class, 'dashboard'])->middleware('auth');
 
 Route::post('/events/join/{id}', [EventController::class, 'joinEvent'])->middleware('auth');
 
-Route::get('/events', [EventController::class, 'events']);
+Route::delete('/events/leave/{id}', [EventController::class, 'leaveEvent'])->middleware('auth');

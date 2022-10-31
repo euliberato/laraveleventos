@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Event;
-
 use App\Models\User;
 
 class EventController extends Controller
@@ -15,10 +14,11 @@ class EventController extends Controller
         $search = request('search');
 
         if($search){
+
             $events = Event::where([
                 ['title', 'like', '%'. $search . '%'] 
-
             ])->get();
+
         }else{
             $events = Event::all();
         }
@@ -40,12 +40,16 @@ class EventController extends Controller
         $event->description = $request->description;
         $event->items = $request->items;
 
-        //Image upload
         if($request->hasFile('image') && $request->file('image')->isValid()) {
+
             $requestImage = $request->image;
+
             $extension = $requestImage->extension();
+
             $imageName = md5($requestImage->getClientOriginalName() . strtotime("now"). "." . $extension);
-            $request->image->move(public_path('img/events'), $imageName);
+
+            $requestImage->move(public_path('img/events'), $imageName);
+
             $event->image = $imageName;
         }
 
@@ -60,29 +64,43 @@ class EventController extends Controller
     public function events() {
         return view('events');
     }
-
-    //Retorno da query 
+ 
     public function show($id){
 
         $event = Event::findOrFail($id);
 
+        $user = auth()->user();
+        $hasUserJoined = false;
+
+        if($user) {
+
+            $userEvents = $user->eventsAsParticipant->toArray();
+
+            foreach($userEvents as $userEvent){
+                if($userEvent['id'] == $id) {
+                    $hasUserJoined = true;
+                }
+            }
+        }
+
         $eventOwner = User::where('id', $event->user_id)->first()->toArray();
 
-        return view('events.show', ['event' => $event, 'eventOwner' => $eventOwner]);
+        return view('events.show', ['event' => $event, 'eventOwner' => $eventOwner, 'hasUserJoined' => $hasUserJoined]);
 
     }
     
-    //Autenticacao p/ dashboard
     public function dashboard() {
 
         $user = auth()->user();
 
         $events = $user->events;
 
-        return view('events.dashboard', ['events' => $events]);
+        $eventsAsParticipant = $user->eventsAsParticipant;
+
+        return view('events.dashboard',
+            ['events' => $events, 'eventasparticipant' => $eventsAsParticipant]);
     }
 
-    //Controller para o DELETE
     public function destroy($id) {
 
         Event::findOrFail($id)->delete();
@@ -93,7 +111,13 @@ class EventController extends Controller
 
     public function edit($id){
 
+        $user = auth()->user();
+
         $event = Event::findOrFail($id);
+
+        if($user->id != $event->user_id) {
+            return redirect('/dashboard')->with('msg', 'Não é possível editar eventos de outros usuários!');
+        }
 
         return view('events.edit', ['event' => $event]); 
 
@@ -104,10 +128,15 @@ class EventController extends Controller
         $data = $request->all();
 
         if($request->hasFile('image') && $request->file('image')->isValid()) {
+
             $requestImage = $request->image;
+
             $extension = $requestImage->extension();
-            $imageName = md5($requestImage->getClientOriginalName() . strtotime("now"). "." . $extension);
+
+            $imageName = md5($requestImage->getClientOriginalName() . strtotime("now")). "." . $extension;
+
             $request->image->move(public_path('img/events'), $imageName);
+
             $data['image'] = $imageName;
         }
 
@@ -120,13 +149,24 @@ class EventController extends Controller
     public function joinEvent($id) {
 
         $user = auth()->user();
-        $user->eventsAsParticipant()->attach($id);
+        
+        $user->eventsAsParticipant()->attach($id); //attach
 
         $event = Event::findOrFail($id);
 
         return redirect('/dashboard')->with('msg', 'Sua presença foi confirmada no evento: ' . $event->title);
 
+    }
 
+    public function leaveEvent($id) {
+        
+        $user = auth()->user();
+
+        $user->eventsAsParticipant()->detach($id);
+
+        $event = Event::findOrFail($id);
+
+        return redirect('/dashboard')->with('msg', 'Você saiu com sucesso do evento: ' . $event->title);
     }
 
 }

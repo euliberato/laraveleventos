@@ -42,6 +42,11 @@ header {
     padding: 10px;
 }
 
+.already-joined-msg {
+    background-color: #f2a340;
+    color: #fff;
+}
+
 /*Estilos da barra de nav*/
 
 #navbar img {
