@@ -45,6 +45,9 @@ header {
 .already-joined-msg {
     background-color: #f2a340;
     color: #fff;
+    border-radius: 10px;
+    padding: 10px;
+    text-align: center;
 }
 
 /*Estilos da barra de nav*/
