@@ -9,30 +9,33 @@ use App\Models\User;
 
 class EventController extends Controller
 {
-    public function index(){
-        
+    
+    public function index() { //OK
+
         $search = request('search');
 
-        if($search){
+        if($search) {
 
             $events = Event::where([
-                ['title', 'like', '%'. $search . '%'] 
+                ['title', 'like', '%'.$search.'%']
             ])->get();
 
-        }else{
+        } else {
             $events = Event::all();
-        }
-
+        }        
+    
         return view('welcome',['events' => $events, 'search' => $search]);
+
     }
 
-    public function create() {
+    public function create() { //OK
         return view('events.create');
     }
 
-    public function store(Request $request) {
+    public function store(Request $request) { //OK
 
         $event = new Event;
+
         $event->title = $request->title;
         $event->date = $request->date;
         $event->city = $request->city;
@@ -40,17 +43,19 @@ class EventController extends Controller
         $event->description = $request->description;
         $event->items = $request->items;
 
+        // Image Upload
         if($request->hasFile('image') && $request->file('image')->isValid()) {
 
             $requestImage = $request->image;
 
             $extension = $requestImage->extension();
 
-            $imageName = md5($requestImage->getClientOriginalName() . strtotime("now"). "." . $extension);
+            $imageName = md5($requestImage->getClientOriginalName() . strtotime("now")) . "." . $extension;
 
             $requestImage->move(public_path('img/events'), $imageName);
 
             $event->image = $imageName;
+
         }
 
         $user = auth()->user();
@@ -59,13 +64,10 @@ class EventController extends Controller
         $event->save();
 
         return redirect('/')->with('msg', 'Evento criado com sucesso!');
+
     }
 
-    public function events() {
-        return view('events');
-    }
- 
-    public function show($id){
+    public function show($id) {
 
         $event = Event::findOrFail($id);
 
@@ -76,19 +78,20 @@ class EventController extends Controller
 
             $userEvents = $user->eventsAsParticipant->toArray();
 
-            foreach($userEvents as $userEvent){
+            foreach($userEvents as $userEvent) {
                 if($userEvent['id'] == $id) {
                     $hasUserJoined = true;
                 }
             }
+
         }
 
         $eventOwner = User::where('id', $event->user_id)->first()->toArray();
 
         return view('events.show', ['event' => $event, 'eventOwner' => $eventOwner, 'hasUserJoined' => $hasUserJoined]);
-
+        
     }
-    
+
     public function dashboard() {
 
         $user = auth()->user();
@@ -97,8 +100,10 @@ class EventController extends Controller
 
         $eventsAsParticipant = $user->eventsAsParticipant;
 
-        return view('events.dashboard',
-            ['events' => $events, 'eventasparticipant' => $eventsAsParticipant]);
+        return view('events.dashboard', 
+            ['events' => $events, 'eventsasparticipant' => $eventsAsParticipant]
+        );
+
     }
 
     public function destroy($id) {
@@ -106,38 +111,40 @@ class EventController extends Controller
         Event::findOrFail($id)->delete();
 
         return redirect('/dashboard')->with('msg', 'Evento excluído com sucesso!');
-        
+
     }
 
-    public function edit($id){
+    public function edit($id) { //OK
 
         $user = auth()->user();
 
         $event = Event::findOrFail($id);
 
         if($user->id != $event->user_id) {
-            return redirect('/dashboard')->with('msg', 'Não é possível editar eventos de outros usuários!');
+            return redirect('/dashboard');
         }
 
-        return view('events.edit', ['event' => $event]); 
+        return view('events.edit', ['event' => $event]);
 
     }
 
-    public function update(Request $request){
+    public function update(Request $request) {
 
         $data = $request->all();
 
+        // Image Upload
         if($request->hasFile('image') && $request->file('image')->isValid()) {
 
             $requestImage = $request->image;
 
             $extension = $requestImage->extension();
 
-            $imageName = md5($requestImage->getClientOriginalName() . strtotime("now")). "." . $extension;
+            $imageName = md5($requestImage->getClientOriginalName() . strtotime("now")) . "." . $extension;
 
-            $request->image->move(public_path('img/events'), $imageName);
+            $requestImage->move(public_path('img/events'), $imageName);
 
             $data['image'] = $imageName;
+
         }
 
         Event::findOrFail($request->id)->update($data);
@@ -146,20 +153,20 @@ class EventController extends Controller
 
     }
 
-    public function joinEvent($id) {
+    public function joinEvent($id) { //OK
 
         $user = auth()->user();
-        
-        $user->eventsAsParticipant()->attach($id); //attach
+
+        $user->eventsAsParticipant()->attach($id);
 
         $event = Event::findOrFail($id);
 
-        return redirect('/dashboard')->with('msg', 'Sua presença foi confirmada no evento: ' . $event->title);
+        return redirect('/dashboard')->with('msg', 'Sua presença está confirmada no evento ' . $event->title);
 
     }
 
     public function leaveEvent($id) {
-        
+
         $user = auth()->user();
 
         $user->eventsAsParticipant()->detach($id);
@@ -167,6 +174,7 @@ class EventController extends Controller
         $event = Event::findOrFail($id);
 
         return redirect('/dashboard')->with('msg', 'Você saiu com sucesso do evento: ' . $event->title);
+
     }
 
 }
